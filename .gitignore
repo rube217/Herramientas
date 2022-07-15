@@ -1,1 +1,3 @@
-__pycache__/Functions.cpython-310.pyc
+# Byte-compiled / optimezed / DLL files
+__pycache__/
+*.py[cod]

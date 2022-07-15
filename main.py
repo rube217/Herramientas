@@ -1,3 +1,4 @@
+from tkinter.filedialog import askdirectory
 from Functions import GetChangeset_Errors, GetConfiguration, GetDifferencesRTDB, GetElementID, GetSourceFile, GetSummaryReport
 import datetime, os, sqlalchemy
 
@@ -22,7 +23,7 @@ def main():
             print("Por favor ingresar archivo .csv, resultado de Summary Report")
             df,source = GetChangeset_Errors()
                 
-            with open('ProcessedErrors_{}.csv'.format(datetime.datetime.now().strftime('%Y%m%d_%H%M')),'w+') as file:
+            with open(askdirectory()+'/ProcessedErrors_{}.csv'.format(datetime.datetime.now().strftime('%Y%m%d_%H%M')),'w+') as file:
                 previous_circuit = ''
                 for i,x in df.iterrows():
                     
@@ -34,12 +35,12 @@ def main():
                     if y != None:
                         file.write(str(y)+'\n')       
             file.close()
-            print('Se ha finalizado la ejecución, el archivo se encuentra en {}'.format(os.getcwd()))
+            print('Se ha finalizado la ejecución')#, el archivo se encuentra en {}'.format(os.getcwd()))
 
         elif option_import_export == '2':
             print("Por favor ingresar carpeta que contenga las carpetas resultado de Summary Report")
             df,source = GetSummaryReport()
-            with open('ProcessedErrors_{}.csv'.format(datetime.datetime.now().strftime('%Y%m%d_%H%M')),'w+') as file:
+            with open(askdirectory()+'/ProcessedErrors_{}.csv'.format(datetime.datetime.now().strftime('%Y%m%d_%H%M')),'w+') as file:
                 previous_circuit = ''
                 for i,x in df.iterrows():
 
@@ -52,7 +53,7 @@ def main():
                         file.write(str(y)+'\n')
                            
             file.close()
-            print('Se ha finalizado la ejecución, el archivo se encuentra en {}'.format(os.getcwd()))
+            print('Se ha finalizado la ejecución')#, el archivo se encuentra en {}'.format(os.getcwd()))
 
     elif option == '2':
         menu_rtdb = GetConfiguration()

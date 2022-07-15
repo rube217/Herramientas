@@ -87,7 +87,11 @@ def GetSummaryReport():
         df = pd.DataFrame(columns=['Feeder','Error'])
         
         for i in os.listdir(root):
-            with open(root+'/'+i+'/SummaryReport.txt','r') as F:
+            if os.path.exists(root+'/'+i+'/SumariodeInformes.txt'):
+                filename = 'SumariodeInformes.txt'
+            else:
+                filename = 'SummaryReport.txt'
+            with open(root+'/'+i+'/'+filename,'r') as F:
                 Lines = F.readlines()
             for Line in Lines:
                 if 'ERROR' in Line:
