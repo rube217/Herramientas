@@ -109,7 +109,13 @@ def GetSourceFile(FeederList):
     if ' ' in FeederList:
         FeederList = FeederList.split(' ')[0]
     FileChoosen = ['',0]
-    for root,dir,files in os.walk('//10.241.115.13/Extract'):
+
+    while os.path.isdir(r'\\10.241.115.13\Extract') == False: ## autenticacion para la carpeta compartida
+        user = input("Por favor ingresar su usuario de desarrollo (sin el dominio, ejemplo: rdjaramillo)")
+        password = input("Por favor ingresar su contraseña")
+        os.system(r'net use \\10.241.115.13\Extract /user:"dev\{}" "{}"'.format(user,password))
+
+    for root,dir,files in os.walk(r'\\10.241.115.13\Extract'):
         for file in files:
             if FeederList in file:
                 FileChoosen[1] = max(FileChoosen[1], os.path.getctime(root+'/'+file))
