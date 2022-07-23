@@ -3,8 +3,8 @@ from Functions import GetChangeset_Errors, GetConfiguration, GetDifferencesRTDB,
 import datetime, os, sqlalchemy
 
 def main():
-    conn_prod = sqlalchemy.create_engine('mssql+pyodbc://Epsareportes:cmXoasys2@10.241.114.12\OASYSHDB:20010/ADMS_QueryEngine?driver=SQL Server')
-    conn_dev = sqlalchemy.create_engine('mssql+pyodbc://epsareportes:Epsa.2020!@10.241.109.41\OASYSHDB:20010/ADMS_QueryEngine?driver=SQL Server')
+    conn_dev = sqlalchemy.create_engine('mssql+pyodbc://Epsareportes:cmXoasys2@10.241.114.12\OASYSHDB:20010/ADMS_QueryEngine?driver=SQL Server')
+    conn_prod = sqlalchemy.create_engine('mssql+pyodbc://epsareportes:Epsa.2020!@10.241.109.41\OASYSHDB:20010/ADMS_QueryEngine?driver=SQL Server')
 
     option:str = input("""
     Que deseas hacer:
@@ -33,7 +33,7 @@ def main():
                     
                     y = GetElementID(source_file,x.FileContent)       
                     if y != None:
-                        file.write(str(y)+'\n')       
+                        file.write(str(y)+'\tFeeder:\t'+x.Circuit+'\n')       
             file.close()
             print('Se ha finalizado la ejecución')#, el archivo se encuentra en {}'.format(os.getcwd()))
 
@@ -50,7 +50,7 @@ def main():
 
                     y = GetElementID(source_file,x.Error)       
                     if y != None:
-                        file.write(str(y)+'\n')
+                        file.write(str(y)+'\tFeeder:\t'+x.Feeder+'\n')
                            
             file.close()
             print('Se ha finalizado la ejecución')#, el archivo se encuentra en {}'.format(os.getcwd()))

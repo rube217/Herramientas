@@ -50,8 +50,10 @@ def GetDifferencesRTDB(conn_prod, conn_dev, table):
         table_create = table_diff.loc[table_diff['Exist']=='right_only',(table_diff.columns == 'Name') | (table_diff.columns.str.contains('_y'))].rename(columns = dicty)
         
         table_update = table_diff.loc[table_diff['Exist']=='both',:].reset_index()
-        x = table_update.loc[:,(table_update.columns == 'Name')|(table_update.columns.str.contains('_x'))].rename(columns=dictx)
-        y = table_update.loc[:,(table_update.columns == 'Name')|(table_update.columns.str.contains('_y'))].rename(columns=dicty)
+        x = table_update.loc[:,(table_update.columns == 'Name')|(table_update.columns.str.contains('_x'))].rename(columns=dictx) ## x es dev
+        y = table_update.loc[:,(table_update.columns == 'Name')|(table_update.columns.str.contains('_y'))].rename(columns=dicty) ## y es prod
+        if 'DMS Alias' in table_dev.columns:
+            y['DMS Alias'] = x['DMS Alias']
         table_update = y.loc[~(x==y).all(1)]
                
         if not(table_update.empty & table_create.empty & table_delete.empty):
@@ -73,7 +75,7 @@ def GetDifferencesRTDB(conn_prod, conn_dev, table):
 def GetChangeset_Errors():
     try:
         file_root = askopenfilename()
-        df = pd.read_csv(file_root,sep=';',error_bad_lines= False,skiprows=1)
+        df = pd.read_csv(file_root,sep=',|;',error_bad_lines= False,skiprows=1,engine='python')
         df.Circuit = df.Circuit.str.replace('( [[A-Z]\w+])','')
 
         source = 'ChangeSet'
@@ -115,7 +117,7 @@ def GetSourceFile(FeederList):
         password = input("Por favor ingresar su contraseña")
         os.system(r'net use \\10.241.115.13\Extract /user:"dev\{}" "{}"'.format(user,password))
 
-    for root,dir,files in os.walk(r'\\10.241.115.13\Extract'):
+    for root,dir,files in os.walk('//10.241.115.13/Extract'):
         for file in files:
             if FeederList in file:
                 FileChoosen[1] = max(FileChoosen[1], os.path.getctime(root+'/'+file))
